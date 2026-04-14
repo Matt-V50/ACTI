@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/acti/',  // ← 改成你的repo名
+  base: '/ACTI/',  // ← 改成你的repo名
 })

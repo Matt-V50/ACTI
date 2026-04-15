@@ -814,7 +814,29 @@ function AboutPage({ setPage }) {
             <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 12, color: "rgba(255,255,255,0.3)", letterSpacing: 3, marginBottom: 12 }}>DISCLAIMER</div>
             <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>ACTI纯属娱乐，没有任何心理学依据。请勿将测试结果用于辞职、吵架、绩效考核或自我怀疑。如果结果看起来很准，那是巧合。如果很离谱，那也是巧合。</p>
           </div>
-          <p>灵感来源：<span style={{ color: "#F0E68C" }}>SBTI</span> by B站UP主@蛆肉儿串儿</p>
+                    <p>
+            灵感来源：<span style={{ color: "#F0E68C" }}>SBTI</span> by 
+            <a
+              href="https://space.bilibili.com/417038183"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "#F0E68C", textDecoration: "none" }}
+            >
+              B站UP主@Q肉儿串儿
+            </a>
+          </p>
+          <p>
+            作者：
+            <a
+              href="https://www.xiaohongshu.com/user/profile/61d329c4000000001000f722"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "#F0E68C", textDecoration: "none" }}
+            >
+              小红书@麦丽素
+            </a>
+          </p>
+        </div>
         </div>
         <div style={{ textAlign: "center", marginTop: 48 }}>
           <Btn onClick={() => setPage("test")}>去测试 →</Btn>

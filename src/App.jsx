@@ -841,7 +841,6 @@ function AboutPage({ setPage }) {
         <div style={{ textAlign: "center", marginTop: 48 }}>
           <Btn onClick={() => setPage("test")}>去测试 →</Btn>
         </div>
-      </div>
     </div>
   );
 }

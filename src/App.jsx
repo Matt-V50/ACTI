@@ -597,18 +597,24 @@ function TypesPage({ setPage, setSelectedType }) {
             <div key={t.code} onMouseEnter={() => setHov(t.code)} onMouseLeave={() => setHov(null)}
               onClick={() => { setSelectedType(t); setPage("typeDetail"); }}
               style={{
-                cursor: "pointer", padding: 28, border: "1px solid " + (hov === t.code ? t.color : "rgba(255,255,255,0.08)"),
-                borderRadius: 4, background: hov === t.code ? t.color + "12" : "rgba(255,255,255,0.02)",
-                transition: "all 0.3s", position: "relative", overflow: "hidden",
+                cursor: "pointer", border: "1px solid " + (hov === t.code ? t.color : "rgba(255,255,255,0.08)"),
+                borderRadius: 8, background: hov === t.code ? t.color + "12" : "rgba(255,255,255,0.02)",
+                transition: "all 0.3s", overflow: "hidden",
               }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
-                <TypeImage type={t} size={72} />
-                <div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 18, color: t.color, letterSpacing: 3, marginBottom: 4 }}>{t.code}</div>
-                  <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 16, color: "rgba(255,255,255,0.7)" }}>{t.name}</div>
+              <div style={{ position: "relative", background: t.color + "10" }}>
+                <TypeImage type={t} size={200} style={{ margin: "0 auto", display: "block", width: "100%" }} />
+                <div style={{
+                  position: "absolute", bottom: 0, left: 0, right: 0,
+                  background: "linear-gradient(transparent, rgba(10,10,12,0.9))",
+                  padding: "40px 16px 12px",
+                }}>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 20, color: "#fff", letterSpacing: 3, fontWeight: 700, textShadow: "0 1px 10px rgba(0,0,0,0.5)" }}>{t.code}</div>
                 </div>
               </div>
-              <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 13, color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>{t.tagline}</div>
+              <div style={{ padding: "12px 16px 16px" }}>
+                <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>{t.name}</div>
+                <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>{t.tagline}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -628,11 +634,22 @@ function TypeDetailPage({ type, setPage }) {
           background: "none", border: "none", color: "rgba(255,255,255,0.4)",
           fontFamily: "'Space Mono',monospace", fontSize: 13, cursor: "pointer", marginBottom: 40, letterSpacing: 2,
         }}>{"\u2190 返回全部角色"}</button>
-        <div style={{ textAlign: "center", padding: "60px 0", borderBottom: "2px solid " + type.color + "33", marginBottom: 40 }}>
-          <TypeImage type={type} size={140} style={{ margin: "0 auto 20px" }} />
-          <div style={{ fontFamily: "'Space Mono',monospace", fontSize: "clamp(36px,8vw,56px)", color: type.color, letterSpacing: 6, marginBottom: 8, fontWeight: 700 }}>{type.code}</div>
-          <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 22, color: "rgba(255,255,255,0.7)", marginBottom: 8 }}>{type.name}</div>
-          <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: 2 }}>{type.nameEn}</div>
+        {/* Hero with large image and overlaid code */}
+        <div style={{ borderRadius: 8, overflow: "hidden", marginBottom: 40, border: "2px solid " + type.color + "33" }}>
+          <div style={{ position: "relative", background: type.color + "12" }}>
+            <TypeImage type={type} size={280} style={{ margin: "0 auto", display: "block" }} />
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: "linear-gradient(transparent, rgba(10,10,12,0.95))",
+              padding: "80px 28px 24px", textAlign: "center",
+            }}>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: "clamp(36px,8vw,56px)", color: "#fff", letterSpacing: 6, fontWeight: 700, textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}>{type.code}</div>
+            </div>
+          </div>
+          <div style={{ padding: "16px 28px 24px", background: "rgba(10,10,12,0.95)", textAlign: "center" }}>
+            <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 22, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>{type.name}</div>
+            <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: 2 }}>{type.nameEn}</div>
+          </div>
         </div>
         <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 20, color: type.color, textAlign: "center", marginBottom: 40, fontStyle: "italic" }}>
           {"「" + type.tagline + "」"}
@@ -767,12 +784,23 @@ function ResultPage({ result, setPage, setSelectedType }) {
     <div style={{ minHeight: "100vh", paddingTop: 80, opacity: show ? 1 : 0, transition: "opacity 0.8s ease" }}>
       <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 24px 80px", textAlign: "center" }}>
         <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 12, color: "rgba(255,255,255,0.25)", letterSpacing: 6, marginBottom: 40, textTransform: "uppercase" }}>你的会计人格是</div>
-        <div style={{ padding: "48px 32px", border: "2px solid " + type.color, borderRadius: 4, background: type.color + "08", marginBottom: 40, position: "relative", overflow: "hidden" }}>
-          <TypeImage type={type} size={120} style={{ margin: "0 auto 20px" }} />
-          <div style={{ fontFamily: "'Space Mono',monospace", fontSize: "clamp(40px,10vw,64px)", color: type.color, letterSpacing: 6, fontWeight: 700, marginBottom: 8, textShadow: "0 0 60px " + type.color + "44" }}>{type.code}</div>
-          <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 22, color: "rgba(255,255,255,0.8)", marginBottom: 8 }}>{type.name}</div>
-          <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: 1, marginBottom: 24 }}>{"匹配度 " + matchPercent + "%"}</div>
-          <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 16, color: type.color, fontStyle: "italic" }}>{"「" + type.tagline + "」"}</div>
+        {/* Hero card with large image and overlaid text */}
+        <div style={{ marginBottom: 40, borderRadius: 8, overflow: "hidden", border: "2px solid " + type.color + "44" }}>
+          <div style={{ position: "relative", background: type.color + "15" }}>
+            <TypeImage type={type} size={320} style={{ margin: "0 auto", display: "block" }} />
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: "linear-gradient(transparent, rgba(10,10,12,0.95))",
+              padding: "60px 24px 24px",
+            }}>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: "clamp(36px,10vw,56px)", color: "#fff", letterSpacing: 6, fontWeight: 700, textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}>{type.code}</div>
+            </div>
+          </div>
+          <div style={{ padding: "20px 24px 28px", background: "rgba(10,10,12,0.95)" }}>
+            <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 22, color: "rgba(255,255,255,0.85)", marginBottom: 6 }}>{type.name}</div>
+            <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 13, color: type.color, letterSpacing: 1, marginBottom: 12 }}>{"匹配度 " + matchPercent + "%"}</div>
+            <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.5)", fontStyle: "italic" }}>{"「" + type.tagline + "」"}</div>
+          </div>
         </div>
         <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.6)", lineHeight: 2, textAlign: "left", marginBottom: 40 }}>{type.desc}</div>
         <div style={{ padding: 24, borderLeft: "3px solid " + type.color, background: type.color + "08", textAlign: "left", marginBottom: 40 }}>
@@ -810,28 +838,7 @@ function AboutPage({ setPage }) {
             <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 12, color: "rgba(255,255,255,0.3)", letterSpacing: 3, marginBottom: 12 }}>DISCLAIMER</div>
             <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>ACTI纯属娱乐，没有任何心理学依据。请勿将测试结果用于辞职、吵架、绩效考核或自我怀疑。如果结果看起来很准，那是巧合。如果很离谱，那也是巧合。</p>
           </div>
-          <p>
-            灵感来源：<span style={{ color: "#F0E68C" }}>SBTI</span> by 
-            <a
-              href="https://space.bilibili.com/417038183"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "#F0E68C", textDecoration: "none" }}
-            >
-              B站UP主@Q肉儿串儿
-            </a>
-          </p>
-          <p>
-            作者：
-            <a
-              href="https://www.xiaohongshu.com/user/profile/61d329c4000000001000f722"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "#F0E68C", textDecoration: "none" }}
-            >
-              小红书@麦丽素
-            </a>
-          </p>
+          <p>灵感来源：<span style={{ color: "#F0E68C" }}>SBTI</span> by B站UP主@蛆肉儿串儿</p>
         </div>
         <div style={{ textAlign: "center", marginTop: 48 }}>
           <Btn onClick={() => setPage("test")}>去测试 →</Btn>

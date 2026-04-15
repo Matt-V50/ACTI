@@ -599,7 +599,7 @@ function TypesPage({ setPage, setSelectedType }) {
   );
 }
 
-function TypeDetailPage({ type, setPage }) {
+function TypeDetailPage({ type, setPage, setSelectedType }) {
   if (!type) return null;
   const bestType = TYPES.find(t => t.code === type.bestMatch);
   const worstType = TYPES.find(t => t.code === type.worstMatch);
@@ -669,7 +669,7 @@ function TypeDetailPage({ type, setPage }) {
         {/* Compatibility */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 48 }}>
           {bestType && (
-            <div onClick={() => { setPage("typeDetail"); window.scrollTo(0,0); }}
+            <div onClick={() => { setSelectedType(bestType); setPage("typeDetail"); window.scrollTo(0,0); }}
               style={{ padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, cursor: "pointer" }}>
               <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>BEST MATCH</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -682,7 +682,7 @@ function TypeDetailPage({ type, setPage }) {
             </div>
           )}
           {worstType && (
-            <div onClick={() => { setPage("typeDetail"); window.scrollTo(0,0); }}
+            <div onClick={() => { setSelectedType(worstType); setPage("typeDetail"); window.scrollTo(0,0); }}
               style={{ padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, cursor: "pointer" }}>
               <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>WORST MATCH</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -846,7 +846,7 @@ export default function App() {
       <Nav page={page} setPage={setPage} />
       {page === "home" && <HomePage setPage={setPage} />}
       {page === "types" && <TypesPage setPage={setPage} setSelectedType={setSelectedType} />}
-      {page === "typeDetail" && <TypeDetailPage type={selectedType} setPage={setPage} />}
+      {page === "typeDetail" && <TypeDetailPage type={selectedType} setPage={setPage} setSelectedType={setSelectedType} />}
       {page === "test" && <TestPage setPage={setPage} setResult={setResult} />}
       {page === "result" && <ResultPage result={result} setPage={setPage} setSelectedType={setSelectedType} />}
       {page === "about" && <AboutPage setPage={setPage} />}

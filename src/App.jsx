@@ -511,7 +511,6 @@ function Btn({ onClick, children, color, border, bg, hoverBg, hoverColor, style:
 }
 
 function HomePage({ setPage }) {
-  const [hov, setHov] = useState(null);
   const marquee = [...TYPES, ...TYPES];
   return (
     <div style={{ minHeight: "100vh", paddingTop: 80 }}>
@@ -537,6 +536,10 @@ function HomePage({ setPage }) {
           color: "rgba(255,255,255,0.35)", marginBottom: 48, maxWidth: 500, lineHeight: 1.6,
         }}>MBTI太正经了。来看看你是哪种会计。<br />16题，找到你的财务人格。</p>
         <Btn onClick={() => setPage("test")} style={{ fontSize: 16, letterSpacing: 4, padding: "18px 48px" }}>开始测试</Btn>
+        <p style={{
+          fontFamily: "'Noto Serif SC',serif", fontSize: 13,
+          color: "rgba(255,255,255,0.25)", marginTop: 20, lineHeight: 1.8,
+        }}>准备好被精准冒犯了吗？ · 纯属娱乐，请勿辞职</p>
       </div>
       <div style={{
         overflow: "hidden", padding: "40px 0",
@@ -555,31 +558,6 @@ function HomePage({ setPage }) {
             </div>
           ))}
         </div>
-      </div>
-      <div style={{ padding: "80px 24px", maxWidth: 900, margin: "0 auto" }}>
-        <h2 style={{
-          fontFamily: "'Noto Serif SC',serif", fontSize: 24, color: "rgba(255,255,255,0.6)",
-          textAlign: "center", marginBottom: 48, fontWeight: 300,
-        }}>16种会计人格，总有一款是你</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
-          {TYPES.map(t => (
-            <div key={t.code} onMouseEnter={() => setHov(t.code)} onMouseLeave={() => setHov(null)}
-              onClick={() => setPage("types")} style={{
-                cursor: "pointer", padding: 20, textAlign: "center",
-                border: "1px solid " + (hov === t.code ? t.color : "rgba(255,255,255,0.08)"),
-                borderRadius: 4, background: hov === t.code ? t.color + "15" : "rgba(255,255,255,0.02)",
-                transition: "all 0.3s",
-              }}>
-              <TypeImage type={t} size={64} style={{ margin: "0 auto 8px" }} />
-              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 14, color: t.color, letterSpacing: 2, marginBottom: 4 }}>{t.code}</div>
-              <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{t.name}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ textAlign: "center", padding: "80px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <p style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 20, color: "rgba(255,255,255,0.5)", marginBottom: 32 }}>准备好被精准冒犯了吗？</p>
-        <Btn onClick={() => setPage("test")}>开始测试 →</Btn>
       </div>
     </div>
   );
@@ -601,19 +579,17 @@ function TypesPage({ setPage, setSelectedType }) {
                 borderRadius: 8, background: hov === t.code ? t.color + "12" : "rgba(255,255,255,0.02)",
                 transition: "all 0.3s", overflow: "hidden",
               }}>
-              <div style={{ position: "relative", background: t.color + "10" }}>
-                <TypeImage type={t} size={200} style={{ margin: "0 auto", display: "block", width: "100%" }} />
+              <div style={{ position: "relative", background: t.color + "10", aspectRatio: "1", }}>
+                <TypeImage type={t} size={280} style={{ display: "block", width: "100%", height: "100%" }} />
                 <div style={{
                   position: "absolute", bottom: 0, left: 0, right: 0,
-                  background: "linear-gradient(transparent, rgba(10,10,12,0.9))",
-                  padding: "40px 16px 12px",
+                  background: "linear-gradient(transparent 0%, rgba(10,10,12,0.85) 70%)",
+                  padding: "50px 14px 14px",
+                  display: "flex", flexDirection: "column", alignItems: "flex-start",
                 }}>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 20, color: "#fff", letterSpacing: 3, fontWeight: 700, textShadow: "0 1px 10px rgba(0,0,0,0.5)" }}>{t.code}</div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 15, color: "#fff", letterSpacing: 2, fontWeight: 700, textShadow: "0 1px 8px rgba(0,0,0,0.6)", marginBottom: 2 }}>{t.code}</div>
+                  <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{t.name}</div>
                 </div>
-              </div>
-              <div style={{ padding: "12px 16px 16px" }}>
-                <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>{t.name}</div>
-                <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>{t.tagline}</div>
               </div>
             </div>
           ))}
@@ -875,7 +851,7 @@ export default function App() {
       {page === "result" && <ResultPage result={result} setPage={setPage} setSelectedType={setSelectedType} />}
       {page === "about" && <AboutPage setPage={setPage} />}
       <footer style={{ textAlign: "center", padding: "40px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: 3 }}>ACTI — 纯属娱乐，请勿辞职</div>
+        <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.15)", letterSpacing: 3 }}>ACTI · Accounting Character Type Indicator</div>
       </footer>
     </div>
   );

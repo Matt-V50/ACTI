@@ -5,13 +5,17 @@ import { useState, useEffect } from "react";
 // 会计人格类型指标
 // ============================================================
 
-// Image path convention: /images/{code}.png  e.g. /images/tie-r.png
+// Image path convention: /images/{gender}/{code}.png  e.g. /images/female/tie-r.png
 // If image fails to load, falls back to emoji
 const IMG_BASE = import.meta.env.BASE_URL + "images/";
 
-function TypeImage({ type, size = 120, style: extra = {} }) {
+function TypeImage({ type, gender, size = 120, style: extra = {} }) {
   const [failed, setFailed] = useState(false);
-  const src = IMG_BASE + type.code.toLowerCase().replace(/\s/g, "") + ".png";
+  // Reset failed state when gender or type changes
+  useEffect(() => { setFailed(false); }, [gender, type.code]);
+
+  const g = gender || type.defaultGender || "female";
+  const src = IMG_BASE + g + "/" + type.code.toLowerCase().replace(/\s/g, "") + ".png";
 
   if (failed) {
     return (
@@ -42,6 +46,7 @@ function TypeImage({ type, size = 120, style: extra = {} }) {
 }
 
 // ---------- DATA: 16 Types ----------
+// defaultGender: 8 female + 8 male for balanced display in All Types page
 const TYPES = [
   {
     code: "TIE-R",
@@ -49,6 +54,7 @@ const TYPES = [
     nameEn: "The Balancer",
     emoji: "⚖️",
     color: "#E63946",
+    defaultGender: "female",
     tagline: "差一分钱，死都不走。",
     desc: "差一分钱，死都不走。全组人都下班了，你还在翻第387张凭证。同事说「差一分没关系」，你看他的眼神像看杀人犯。你的人生没有「差不多」，只有「差一分就是差十万」。找到那一分钱的瞬间，你的快感比涨薪还强烈。别人下班约饭，你在和数字约架。你的Excel里藏着你的执念，你的执念里藏着你最后的尊严。你曾经为了两分钱的差额加班到凌晨，第二天发现是自己多输了一个小数点——但你不后悔，因为「对了就是对了」。",
     traits: ["完美主义", "不放过细节", "较真到底", "数字洁癖"],
@@ -65,6 +71,7 @@ const TYPES = [
     nameEn: "The Month-Ender",
     emoji: "💀",
     color: "#457B9D",
+    defaultGender: "male",
     tagline: "每月25号准时去世，1号自动复活。",
     desc: "每月最后一周准时去世，1号自动复活。年审季你直接进入「死后世界」。朋友圈连续五天没更新不是因为你低调，是因为你真的死了。家人以为你失踪了，同事以为你住在公司了——其实两个都对。关账关的不是账，是你和正常生活之间的那扇门。你的月末标配是：泡面、咖啡、枸杞，和一双没来得及换的拖鞋。1号那天你满血复活，在朋友圈发一条「活过来了」，底下清一色的同行在点赞。",
     traits: ["周期性崩溃", "抗压但有极限", "月初满血复活", "硬扛型选手"],
@@ -81,6 +88,7 @@ const TYPES = [
     nameEn: "The Duplicator",
     emoji: "📋",
     color: "#2A9D8F",
+    defaultGender: "male",
     tagline: "上个月分录改个日期就是这个月的。",
     desc: "上个月的分录改个日期就是这个月的。你的会计人生就是一场大型Ctrl+V表演。领导说「今年有变化」，你心态直接崩了——意味着你要重新想。你上次真正原创一张凭证是什么时候？你自己也不记得了。你不是不会创新，你是发现复制粘贴才是会计的终极真理。新来的实习生问你「为什么这样做」，你说「一直都是这样做的」。其实你也不知道为什么，但它work了十二个月了，你为什么要动它？",
     traits: ["高效（物理）", "模板大师", "拒绝变化", "经验主义者"],
@@ -97,6 +105,7 @@ const TYPES = [
     nameEn: "The Apologizer",
     emoji: "🙇",
     color: "#F4A261",
+    defaultGender: "female",
     tagline: "催人像在道歉，道歉像在催人。",
     desc: "催回款、催发票、催报销单、催部门交数据、催审批签字……你的日常就是一个大型「不好意思打扰了」循环。对方已读不回你还帮他找理由：「可能太忙了吧。」催了三遍不好意思催第四遍，第四遍开头还是「不好意思」。全公司最没有攻击性的人，也是最多事情卡在手上的人。你的微信置顶永远是那几个催了八百遍还没回的人，你每次打开对话框都深呼吸三次才敢发消息。同事说你太软了，但你觉得做人要厚道——虽然厚道的代价是你的KPI。",
     traits: ["社恐催人", "过度共情", "无攻击性", "自我消耗型"],
@@ -113,6 +122,7 @@ const TYPES = [
     nameEn: "The Broke Treasurer",
     emoji: "💸",
     color: "#264653",
+    defaultGender: "male",
     tagline: "帮公司管几个亿，自己花呗没还。",
     desc: "帮公司管几个亿，自己花呗没还。做税务筹划帮老板省了一套房的钱，你的午饭是食堂三块五。别人问你理财建议你滔滔不绝，自己的工资卡余额不敢打开看。你是世界上最懂钱的穷人。每天经手的数字都比你的年薪多几个零。最讽刺的是，你帮客户做财务自由规划的那天晚上，回家发现外卖红包过期了，心痛了十分钟。你安慰自己：「至少我懂复利的力量。」然后继续吃泡面。",
     traits: ["精通理论", "实践为零", "精神富有", "物质贫穷"],
@@ -129,6 +139,7 @@ const TYPES = [
     nameEn: "The Multiverse Architect",
     emoji: "🎭",
     color: "#6D6875",
+    defaultGender: "female",
     tagline: "内账外账无缝切换。",
     desc: "内账外账无缝切换，税务局和老板看到的是两个次元。你不叫「做假账」，你叫「多维度财务叙事工程师」。你最大的恐惧不是做错账，是哪天记不清楚哪个版本给了哪个人。你的大脑里运行着两套操作系统，偶尔还要切换到第三套应付审计。你的桌面上有三个Excel文件，文件名分别是「报表_final」「报表_final_v2」和「报表_真的final_老板看这个」。你不觉得自己在造假，你觉得自己在搞平行宇宙物理学。",
     traits: ["多线程大脑", "记忆力惊人", "压力山大", "版本管理大师"],
@@ -145,6 +156,7 @@ const TYPES = [
     nameEn: "The Yes-Man",
     emoji: "🐶",
     color: "#E76F51",
+    defaultGender: "male",
     tagline: "老板说「帮我算一下」等于今晚别走了。",
     desc: "老板说「帮我算一下」等于你今晚别走了。他拍脑袋你擦屁股，他画大饼你做可行性分析，他说「大概估一下就行」但你知道他要的是精确到小数点后两位。你不是CFO，你是CEO身上的一个外挂配件。「好的」「没问题」「马上做」是你的三大核心技能。你的内心OS和嘴说出来的话从来不是一个频道——嘴上说「好的马上」，脑子里在想「又来了又来了又来了」。但你就是拒绝不了，因为你怕拒绝之后的气氛，比加班还可怕。",
     traits: ["无条件服从", "加班体质", "内心OS很丰富", "讨好型人格"],
@@ -161,6 +173,7 @@ const TYPES = [
     nameEn: "The Inventory Dodger",
     emoji: "✈️",
     color: "#90BE6D",
+    defaultGender: "male",
     tagline: "盘点的时候人呢？飞了。",
     desc: "盘点日别人在仓库里满头大汗数货，你不知道躲在哪个角落玩手机。主管喊你名字，三秒后你从货架后面冒出来：「我在数这边呢！」你不是不想干活，你是觉得数来数去最后还是要调账，那不如直接调。你是全组最有哲学思维的人——用最少的体力解决问题。年终盘点你永远自告奋勇负责「记录」而不是「数数」。你的手机相册里有盘点当天拍的仓库照片——不是工作记录，是你躲在角落拍的自拍。",
     traits: ["摸鱼高手", "善于隐藏", "有自己的道理", "体力活绝缘体"],
@@ -177,6 +190,7 @@ const TYPES = [
     nameEn: "The Zen Accountant",
     emoji: "🧘",
     color: "#B5838D",
+    defaultGender: "female",
     tagline: "差一万？挂其他。审计来了？随缘。",
     desc: "差一万？挂其他。审计来了？随缘。升职没你？命里没有。别人加班焦虑你在喝茶，别人对着报表崩溃你说「都会过去的」。你的心态比资产负债表还平，比直线折旧还稳。全组最没有情绪波动的人，也是唯一一个准点下班从不愧疚的人。你的工位上永远有一杯温度刚好的茶，屏幕永远停在某个不急不慢的Excel上。同事崩溃的时候来找你，你说「急也没用」——他们讨厌这句话，但不得不承认你说的对。",
     traits: ["心态稳如泰山", "不争不抢", "准点下班", "情绪绝缘体"],
@@ -193,6 +207,7 @@ const TYPES = [
     nameEn: "The Pixel Perfectionist",
     emoji: "📐",
     color: "#43AA8B",
+    defaultGender: "female",
     tagline: "字体、缩进、边框、颜色，全部必须完美。",
     desc: "跟TIE-R不同，TIE-R要的是数字对，你要的是一切都对。字体、缩进、小数位数、边框粗细、表头颜色，全部必须完美。你做的报表是艺术品，但没人在乎。你发现同事的表格用了宋体和微软雅黑混排，差点当场去世。你的审美洁癖已经从Excel蔓延到了PPT、邮件、甚至群消息的标点符号。你曾经花两个小时调一张报表的列宽，只为了打印出来每一列都正好在网格线上。同事说你有病，你说这叫「专业素养」。",
     traits: ["审美洁癖", "排版大师", "不被理解的艺术家", "表格美学家"],
@@ -209,6 +224,7 @@ const TYPES = [
     nameEn: "The Budget Novelist",
     emoji: "🎪",
     color: "#F77F00",
+    defaultGender: "female",
     tagline: "把「完全偏了」说成「基本符合预期」。",
     desc: "你做的预算从来没准过，但你的差异分析写得行云流水。核心技能是把「完全偏了」包装成「基本符合预期」，把「亏麻了」翻译成「短期承压但长期向好」。你不是在做财务，你是在做文学创作。年底述职的时候你是全场最佳编剧，数字不够叙事来凑。你的PPT功力比财务功力还深，领导看完你的报告觉得「形势一片大好」——直到看了原始数据。你最擅长的财务术语不是EBITDA，是「环比改善」和「剔除一次性因素后」。",
     traits: ["文字功底深厚", "包装大师", "永远正能量", "PPT王者"],
@@ -225,6 +241,7 @@ const TYPES = [
     nameEn: "The Almost-Quitter",
     emoji: "🚪",
     color: "#9B5DE5",
+    defaultGender: "male",
     tagline: "没辞是因为简历上只会写会计。",
     desc: "入行第一年背准则背到哭，第三年连借贷都不想分了。每天打开电脑的第一个念头是「我为什么要做会计」，第二个念头是「但我简历上只会写这个」。你没有离开，不是因为热爱，是因为沉没成本。你的辞职信已经写好了，就差一个勇气和一个offer。你关注了十几个「转行成功」的公众号，收藏了几十篇「会计转行指南」，但打开频率为零。每次发完牢骚，你又默默打开了Excel——毕竟月底了。",
     traits: ["持续性厌班", "沉没成本受害者", "辞职信常年待发", "精神离职"],
@@ -241,6 +258,7 @@ const TYPES = [
     nameEn: "The Office Glue",
     emoji: "🩹",
     color: "#577590",
+    defaultGender: "female",
     tagline: "「帮个小忙」是你听过最多的话。",
     desc: "报销找你、开票找你、打印机卡纸找你、系统报错找你、「这个流程怎么走」找你。你不是会计，你是全公司的IT+行政+客服+心理咨询师。你的本职工作永远排在最后，因为永远有人在找你「帮个小忙」。你的善良就是你的牢笼。你的微信永远有99+的未读消息，其中95条是「在吗？」。你想说不，但那个字到了嘴边就自动变成了「行吧我看看」。年底评优你什么奖都没拿到，因为你帮的那些忙都不算你的KPI。",
     traits: ["来者不拒", "万能工具人", "本职工作永远最后做", "隐形劳模"],
@@ -257,6 +275,7 @@ const TYPES = [
     nameEn: "The Deadline Surfer",
     emoji: "⏰",
     color: "#F94144",
+    defaultGender: "male",
     tagline: "永远最后一秒交，全部卡点提交。",
     desc: "月报、季报、年报，全部卡点提交。领导问进度你说「快了快了」，实际上还没打开文件。不是你拖延，是你「需要压力才能激发潜能」。同事叫你deadline战神，领导叫你心脏病根源。你的人生哲学：如果提前交了，不就显得deadline定太松了吗？你的电脑桌面上永远有一个文件叫「月报」但里面是空的，它只在截止日前24小时才会被真正打开。神奇的是，你每次都能赶上——虽然质量参差不齐，但「交了」本身就是一种胜利。",
     traits: ["拖延症晚期", "爆发力惊人", "压力转化效率高", "DDL战神"],
@@ -273,6 +292,7 @@ const TYPES = [
     nameEn: "The Paper Millionaire",
     emoji: "👑",
     color: "#FFB703",
+    defaultGender: "female",
     tagline: "帮客户做资产配置，自己基金亏40%。",
     desc: "帮客户做投资分析头头是道，自己的基金亏了40%没敢打开看。给老板讲资产配置滔滔不绝，回家吃泡面。同事找你推荐股票，你推得头头是道——反正亏的不是自己的钱。你活在一个「帮别人赚钱」的平行宇宙里，在那里你是巴菲特。你的知乎收藏夹里有200篇投资文章，你的基金账户里有200块钱。你最常安慰自己的话是「投资最重要的是认知」——你的认知确实很到位，只是钱不够配合你的认知。",
     traits: ["理论巨人实践矮子", "帮人头头是道", "自己一塌糊涂", "纸上谈兵大师"],
@@ -289,6 +309,7 @@ const TYPES = [
     nameEn: "The Enforcer",
     emoji: "📢",
     color: "#D62828",
+    defaultGender: "male",
     tagline: "全组唯一敢跟业务部门硬刚的人。",
     desc: "全组唯一敢跟业务部门正面硬刚的人。「发票不合规打回去！」「预算超了我不签！」「上个月的单子这个月才拿来，你当我是时间管理大师？」别人做会计做成了服务业，你做成了执法部门。全公司怕你，但全组靠你。你说出了所有会计想说但不敢说的话。你的企业微信头像是你本人，但所有人看到都觉得有一种「不好惹」的气场。你不是脾气差，你是受不了不专业。在你心里，流程就是流程，规定就是规定，谁来了都一样——包括CEO。",
     traits: ["正义感爆棚", "不怕得罪人", "全组靠山", "原则性极强"],
@@ -563,24 +584,56 @@ function HomePage({ setPage }) {
   );
 }
 
-function TypesPage({ setPage, setSelectedType }) {
+function TypesPage({ setPage, setSelectedType, setSelectedGender }) {
   const [hov, setHov] = useState(null);
+  const [genderFilter, setGenderFilter] = useState("all"); // "all" | "female" | "male"
+
+  // Filter types based on selected gender filter
+  const displayedTypes = genderFilter === "all"
+    ? TYPES
+    : TYPES.filter(t => t.defaultGender === genderFilter);
+
+  const filterBtnStyle = (active) => ({
+    fontFamily: "'Space Mono',monospace",
+    fontSize: 12,
+    letterSpacing: 2,
+    padding: "8px 20px",
+    border: "1px solid " + (active ? "#F0E68C" : "rgba(255,255,255,0.15)"),
+    background: active ? "rgba(240,230,140,0.1)" : "transparent",
+    color: active ? "#F0E68C" : "rgba(255,255,255,0.5)",
+    cursor: "pointer",
+    borderRadius: 2,
+    transition: "all 0.2s",
+  });
+
   return (
     <div style={{ minHeight: "100vh", padding: "100px 24px 80px" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <h1 style={{ fontFamily: "'Space Mono',monospace", fontSize: 36, color: "#F0E68C", letterSpacing: 4, marginBottom: 8 }}>ALL TYPES</h1>
-        <p style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 16, color: "rgba(255,255,255,0.4)", marginBottom: 48 }}>16种会计人格 · 每一种都是「全国最稀有的会计人格」</p>
+        <p style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 16, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>16种会计人格 · 每一种都是「全国最稀有的会计人格」</p>
+
+        {/* Gender Filter */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 32, flexWrap: "wrap" }}>
+          <button onClick={() => setGenderFilter("all")} style={filterBtnStyle(genderFilter === "all")}>全部 · 16</button>
+          <button onClick={() => setGenderFilter("female")} style={filterBtnStyle(genderFilter === "female")}>女 · 8</button>
+          <button onClick={() => setGenderFilter("male")} style={filterBtnStyle(genderFilter === "male")}>男 · 8</button>
+        </div>
+
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
-          {TYPES.map(t => (
+          {displayedTypes.map(t => (
             <div key={t.code} onMouseEnter={() => setHov(t.code)} onMouseLeave={() => setHov(null)}
-              onClick={() => { setSelectedType(t); setPage("typeDetail"); }}
+              onClick={() => {
+                setSelectedType(t);
+                setSelectedGender(t.defaultGender);
+                setPage("typeDetail");
+              }}
               style={{
                 cursor: "pointer", border: "1px solid " + (hov === t.code ? t.color : "rgba(255,255,255,0.08)"),
                 borderRadius: 8, background: hov === t.code ? t.color + "12" : "rgba(255,255,255,0.02)",
                 transition: "all 0.3s", overflow: "hidden",
               }}>
               <div style={{ position: "relative", background: t.color + "10", aspectRatio: "1", }}>
-                <TypeImage type={t} size={280} style={{ display: "block", width: "100%", height: "100%" }} />
+                <TypeImage type={t} gender={t.defaultGender} size={280} style={{ display: "block", width: "100%", height: "100%" }} />
                 <div style={{
                   position: "absolute", bottom: 0, left: 0, right: 0,
                   background: "linear-gradient(transparent 0%, rgba(10,10,12,0.85) 70%)",
@@ -599,7 +652,29 @@ function TypesPage({ setPage, setSelectedType }) {
   );
 }
 
-function TypeDetailPage({ type, setPage, setSelectedType }) {
+// Gender toggle component
+function GenderToggle({ gender, setGender, color }) {
+  const btnStyle = (active) => ({
+    fontFamily: "'Space Mono',monospace",
+    fontSize: 11,
+    letterSpacing: 2,
+    padding: "6px 14px",
+    border: "1px solid " + (active ? color : "rgba(255,255,255,0.15)"),
+    background: active ? color + "22" : "transparent",
+    color: active ? color : "rgba(255,255,255,0.4)",
+    cursor: "pointer",
+    borderRadius: 2,
+    transition: "all 0.2s",
+  });
+  return (
+    <div style={{ display: "inline-flex", gap: 6 }}>
+      <button onClick={() => setGender("female")} style={btnStyle(gender === "female")}>女 ♀</button>
+      <button onClick={() => setGender("male")} style={btnStyle(gender === "male")}>男 ♂</button>
+    </div>
+  );
+}
+
+function TypeDetailPage({ type, gender, setGender, setPage, setSelectedType, setSelectedGender }) {
   if (!type) return null;
   const bestType = TYPES.find(t => t.code === type.bestMatch);
   const worstType = TYPES.find(t => t.code === type.worstMatch);
@@ -610,10 +685,11 @@ function TypeDetailPage({ type, setPage, setSelectedType }) {
           background: "none", border: "none", color: "rgba(255,255,255,0.4)",
           fontFamily: "'Space Mono',monospace", fontSize: 13, cursor: "pointer", marginBottom: 40, letterSpacing: 2,
         }}>{"\u2190 返回全部角色"}</button>
+
         {/* Hero with large image and overlaid code */}
-        <div style={{ borderRadius: 8, overflow: "hidden", marginBottom: 40, border: "2px solid " + type.color + "33" }}>
+        <div style={{ borderRadius: 8, overflow: "hidden", marginBottom: 24, border: "2px solid " + type.color + "33" }}>
           <div style={{ position: "relative", background: type.color + "12" }}>
-            <TypeImage type={type} size={280} style={{ margin: "0 auto", display: "block" }} />
+            <TypeImage type={type} gender={gender} size={280} style={{ margin: "0 auto", display: "block" }} />
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               background: "linear-gradient(transparent, rgba(10,10,12,0.95))",
@@ -627,6 +703,12 @@ function TypeDetailPage({ type, setPage, setSelectedType }) {
             <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: 2 }}>{type.nameEn}</div>
           </div>
         </div>
+
+        {/* Gender toggle under hero */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
+          <GenderToggle gender={gender} setGender={setGender} color={type.color} />
+        </div>
+
         <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 20, color: type.color, textAlign: "center", marginBottom: 40, fontStyle: "italic" }}>
           {"「" + type.tagline + "」"}
         </div>
@@ -669,11 +751,16 @@ function TypeDetailPage({ type, setPage, setSelectedType }) {
         {/* Compatibility */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 48 }}>
           {bestType && (
-            <div onClick={() => { setSelectedType(bestType); setPage("typeDetail"); window.scrollTo(0,0); }}
+            <div onClick={() => {
+              setSelectedType(bestType);
+              setSelectedGender(bestType.defaultGender);
+              setPage("typeDetail");
+              window.scrollTo(0,0);
+            }}
               style={{ padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, cursor: "pointer" }}>
               <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>BEST MATCH</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <TypeImage type={bestType} size={36} />
+                <TypeImage type={bestType} gender={bestType.defaultGender} size={36} />
                 <div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 14, color: bestType.color }}>{bestType.code}</div>
                   <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{bestType.name}</div>
@@ -682,11 +769,16 @@ function TypeDetailPage({ type, setPage, setSelectedType }) {
             </div>
           )}
           {worstType && (
-            <div onClick={() => { setSelectedType(worstType); setPage("typeDetail"); window.scrollTo(0,0); }}
+            <div onClick={() => {
+              setSelectedType(worstType);
+              setSelectedGender(worstType.defaultGender);
+              setPage("typeDetail");
+              window.scrollTo(0,0);
+            }}
               style={{ padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, cursor: "pointer" }}>
               <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>WORST MATCH</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <TypeImage type={worstType} size={36} />
+                <TypeImage type={worstType} gender={worstType.defaultGender} size={36} />
                 <div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 14, color: worstType.color }}>{worstType.code}</div>
                   <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{worstType.name}</div>
@@ -749,8 +841,12 @@ function TestPage({ setPage, setResult }) {
   );
 }
 
-function ResultPage({ result, setPage, setSelectedType }) {
+function ResultPage({ result, setPage, setSelectedType, setSelectedGender }) {
   const [show, setShow] = useState(false);
+  // Result page has its own gender state, defaults to the type's default gender
+  const [resultGender, setResultGender] = useState(
+    result ? (result.type.defaultGender || "female") : "female"
+  );
   useEffect(() => { setTimeout(() => setShow(true), 100); }, []);
   if (!result) return null;
   const { type, matchPercent, allScores } = result;
@@ -761,9 +857,9 @@ function ResultPage({ result, setPage, setSelectedType }) {
       <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 24px 80px", textAlign: "center" }}>
         <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 12, color: "rgba(255,255,255,0.25)", letterSpacing: 6, marginBottom: 40, textTransform: "uppercase" }}>你的会计人格是</div>
         {/* Hero card with large image and overlaid text */}
-        <div style={{ marginBottom: 40, borderRadius: 8, overflow: "hidden", border: "2px solid " + type.color + "44" }}>
+        <div style={{ marginBottom: 24, borderRadius: 8, overflow: "hidden", border: "2px solid " + type.color + "44" }}>
           <div style={{ position: "relative", background: type.color + "15" }}>
-            <TypeImage type={type} size={320} style={{ margin: "0 auto", display: "block" }} />
+            <TypeImage type={type} gender={resultGender} size={320} style={{ margin: "0 auto", display: "block" }} />
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               background: "linear-gradient(transparent, rgba(10,10,12,0.95))",
@@ -778,6 +874,12 @@ function ResultPage({ result, setPage, setSelectedType }) {
             <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.5)", fontStyle: "italic" }}>{"「" + type.tagline + "」"}</div>
           </div>
         </div>
+
+        {/* Gender toggle */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
+          <GenderToggle gender={resultGender} setGender={setResultGender} color={type.color} />
+        </div>
+
         <div style={{ fontFamily: "'Noto Serif SC',serif", fontSize: 15, color: "rgba(255,255,255,0.6)", lineHeight: 2, textAlign: "left", marginBottom: 40 }}>{type.desc}</div>
         <div style={{ padding: 24, borderLeft: "3px solid " + type.color, background: type.color + "08", textAlign: "left", marginBottom: 40 }}>
           <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 3, marginBottom: 8 }}>你的口头禅</div>
@@ -787,7 +889,11 @@ function ResultPage({ result, setPage, setSelectedType }) {
           <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.25)", letterSpacing: 3, marginBottom: 16, textTransform: "uppercase" }}>你也有一点……</div>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
             {runners.map(r => r && (
-              <span key={r.code} onClick={() => { setSelectedType(r); setPage("typeDetail"); }}
+              <span key={r.code} onClick={() => {
+                setSelectedType(r);
+                setSelectedGender(r.defaultGender);
+                setPage("typeDetail");
+              }}
                 style={{ cursor: "pointer", padding: "8px 16px", border: "1px solid " + r.color + "44", borderRadius: 2, fontFamily: "'Space Mono',monospace", fontSize: 13, color: r.color, background: r.color + "11" }}>{r.code}</span>
             ))}
           </div>
@@ -849,6 +955,7 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [result, setResult] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
+  const [selectedGender, setSelectedGender] = useState("female");
   useEffect(() => { window.scrollTo(0, 0); }, [page]);
 
   return (
@@ -866,10 +973,10 @@ export default function App() {
       `}</style>
       <Nav page={page} setPage={setPage} />
       {page === "home" && <HomePage setPage={setPage} />}
-      {page === "types" && <TypesPage setPage={setPage} setSelectedType={setSelectedType} />}
-      {page === "typeDetail" && <TypeDetailPage type={selectedType} setPage={setPage} setSelectedType={setSelectedType} />}
+      {page === "types" && <TypesPage setPage={setPage} setSelectedType={setSelectedType} setSelectedGender={setSelectedGender} />}
+      {page === "typeDetail" && <TypeDetailPage type={selectedType} gender={selectedGender} setGender={setSelectedGender} setPage={setPage} setSelectedType={setSelectedType} setSelectedGender={setSelectedGender} />}
       {page === "test" && <TestPage setPage={setPage} setResult={setResult} />}
-      {page === "result" && <ResultPage result={result} setPage={setPage} setSelectedType={setSelectedType} />}
+      {page === "result" && <ResultPage result={result} setPage={setPage} setSelectedType={setSelectedType} setSelectedGender={setSelectedGender} />}
       {page === "about" && <AboutPage setPage={setPage} />}
       <footer style={{ textAlign: "center", padding: "40px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, color: "rgba(255,255,255,0.15)", letterSpacing: 3 }}>ACTI · Accounting Character Type Indicator</div>
